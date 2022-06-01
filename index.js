@@ -8,14 +8,19 @@ app.use(cors())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-const port = 3010
+let port = process.env.PORT || 3010
+let smtpLogin = process.env.SMTP_LOGIN || '---'
+let smtpPassword = process.env.SMTP_PASSWORD || '---'
 
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     tls: {
         rejectUnauthorized: false
     },
-    
+    auth: {
+        user: smtpLogin,
+        pass: smtpPassword,
+    }
 });
 
 app.get('/', (req, res) => {
