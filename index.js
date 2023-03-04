@@ -2,6 +2,7 @@ const express = require('express')
 const nodemailer = require('nodemailer');
 const cors = require('cors')
 const bodyParser = require('body-parser')
+require('dotenv').config()
 
 const app = express()
 app.use(cors({
@@ -49,9 +50,9 @@ app.post('/sendMessage', async (req, res) => {
 
     await transporter.sendMail(mailOptions, function (err, info) {
         if (err)
-            console.log(err)
+            console.log('error',err)
         else
-            console.log(info);
+            console.log('info',info);
     });
     res.send({data: 'Message sent'})
 })
