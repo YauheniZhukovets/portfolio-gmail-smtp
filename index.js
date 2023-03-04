@@ -9,9 +9,9 @@ app.use(cors())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-let port = process.env.PORT || 3010
+const port = process.env.PORT || 3010
 
-let transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
     service: 'gmail',
     tls: {
         rejectUnauthorized: false
@@ -27,8 +27,8 @@ app.get('/', (req, res) => {
 })
 
 app.post('/sendMessage', async (req, res) => {
-    let {fullName, contacts, message} = req.body
-    let mailOptions = {
+    const {fullName, contacts, message} = req.body
+    const mailOptions = {
         from: 'portfolioevgenizhukavets@gmail.com', // sender address
         to: 'yauhenizhukovets@gmail.com', // list of receivers
         subject: 'Portfolio feedback', // Subject line
@@ -41,14 +41,19 @@ app.post('/sendMessage', async (req, res) => {
         <div>
         <b>Message</b>: ${message}
         </div>`
-    };
+    }
 
-    await transporter.sendMail(mailOptions, function (err, info) {
-        if (err)
-            console.log('error',err)
-        else
-            console.log('info',info);
-    });
+    await new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log('error', err)
+                reject(err)
+            } else {
+                console.log('info', info);
+                resolve(info)
+            }
+        })
+    })
     res.send({data: 'Message sent'})
 })
 
