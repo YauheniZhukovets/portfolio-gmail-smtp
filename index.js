@@ -13,8 +13,6 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 let port = process.env.PORT || 3010
-let smtpLogin = process.env.SMTP_LOGIN || '---'
-let smtpPassword = process.env.SMTP_PASSWORD || '---'
 
 let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -22,8 +20,8 @@ let transporter = nodemailer.createTransport({
         rejectUnauthorized: false
     },
     auth: {
-        user: smtpLogin,
-        pass: smtpPassword,
+        user: process.env.SMTP_LOGIN,
+        pass: process.env.SMTP_PASSWORD,
     }
 });
 
